@@ -83,8 +83,10 @@ class GroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Group $group)
+    public function destroy(Group $grupo)
     {
-        $group->delete();
+        $grupo->delete();
+
+        return redirect('/grupos');
     }
 }

@@ -26,6 +26,12 @@
                     <td>
                         <a href="{{ route('grupos.edit', $grupo) }}">Editar</a>
                         </td>
+                        <form action="{{ route('grupos.destroy', $grupo) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('¿Estás seguro de eliminar este grupo?')">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             @empty
                 <tr>

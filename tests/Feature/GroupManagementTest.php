@@ -65,5 +65,19 @@ class GroupManagementTest extends TestCase
         // 4. Verificación:
         $response->assertRedirect('/grupos');
         $this->assertEquals('Nombre Actualizado', $group->fresh()->name);
+    }
+    /** @test */
+    public function a_group_can_be_deleted()
+    {
+        // 1. Preparación
+        $group = Group::factory()->create();
+        $this->assertCount(1, Group::all());
+
+        // 2. Acción
+        $response = $this->delete(route('grupos.destroy', $group));
+
+        // 3. Verificación
+        $response->assertRedirect('/grupos');
+        $this->assertCount(0, Group::all());
     }    
 }
