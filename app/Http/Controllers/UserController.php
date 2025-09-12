@@ -101,8 +101,10 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $usuario) // Laravel nos entrega el usuario a eliminar
     {
-        //
+        $usuario->delete(); // Lo elimina de la base de datos
+
+        return redirect(route('usuarios.index')); // Redirige a la lista
     }
 }

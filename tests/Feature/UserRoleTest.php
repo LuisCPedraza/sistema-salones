@@ -95,5 +95,26 @@ class UserRoleTest extends TestCase
 
         // - Verificamos que el nombre del usuario en la BD ahora es el nuevo.
         $this->assertEquals('Nombre Actualizado', $user->name);
+    }
+
+    /** @test */
+    public function a_user_can_be_deleted()
+    {
+        // 1. Preparación: Creamos un rol y un usuario.
+        $role = Role::create(['name' => 'coordinador']);
+        $user = User::factory()->create(['role_id' => $role->id]);
+
+        // Verificamos que el usuario realmente existe en la BD.
+        $this->assertCount(1, User::all());
+
+        // 2. Acción: Hacemos una petición DELETE a la ruta de eliminación.
+        $response = $this->delete(route('usuarios.destroy', $user));
+
+        // 3. Verificación:
+        // - Que nos redirija de vuelta a la lista de usuarios.
+        $response->assertRedirect(route('usuarios.index'));
+
+        // - Verificamos que el usuario ya NO está en la base de datos.
+        $this->assertCount(0, User::all());
     }    
 }
