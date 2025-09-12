@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role; // <-- ESTA LÍNEA ES LA CLAVE
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -21,7 +22,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('usuarios.create');
+        $roles = Role::all(); // Obtenemos todos los roles de la BD
+        return view('usuarios.create', ['roles' => $roles]); // Se los pasamos a la vista
     }
 
     /**
@@ -29,7 +31,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Esta lógica la añadiremos en el siguiente paso.
+        // 1. Validar los datos, incluyendo el role_id
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role_id' => 'required|exists:roles,id', // <-- AÑADE ESTA REGLA
+        ]);
+
+        // 2. Crear el usuario con TODOS los datos validados
+        User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password']),
+            'role_id' => $validatedData['role_id'], // <-- AÑADE ESTA LÍNEA
+        ]);
+
+        // 3. Redirigir a la lista de usuarios
+        return redirect(route('usuarios.index'));
     }
 
     /**
