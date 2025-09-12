@@ -23,6 +23,9 @@
                     <td>{{ $grupo->students_count }}</td>
                     <td>
                         </td>
+                    <td>
+                        <a href="{{ route('grupos.edit', $grupo) }}">Editar</a>
+                        </td>
                 </tr>
             @empty
                 <tr>

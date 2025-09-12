@@ -7,7 +7,10 @@ Route::get('/', function () {
 });
 // Other routes...
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
 
 // ... (puede haber otras rutas aquí)
 
 Route::resource('usuarios', UserController::class);
+Route::resource('grupos', GroupController::class);
+
