@@ -25,6 +25,9 @@
                     <td>{{ $salon->resources }}</td>
                     <td>
                         </td>
+                    <td>
+                        <a href="{{ route('salones.edit', $salon) }}">Editar</a>
+                    </td>
                 </tr>
             @empty
                 <tr>

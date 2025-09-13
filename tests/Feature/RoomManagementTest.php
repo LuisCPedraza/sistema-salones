@@ -28,4 +28,39 @@ class RoomManagementTest extends TestCase
         $this->assertCount(1, Room::all());
         $response->assertRedirect('/salones');
     }
+
+    /** @test */
+    public function the_edit_room_page_loads_correctly()
+    {
+        // 1. Preparación
+        $room = Room::factory()->create();
+
+        // 2. Acción
+        $response = $this->get(route('salones.edit', $room));
+
+        // 3. Verificación
+        $response->assertStatus(200);
+        $response->assertSee($room->name);
+    }
+
+    /** @test */
+    public function a_room_can_be_updated()
+    {
+        // 1. Preparación
+        $room = Room::factory()->create(['name' => 'Salón Antiguo']);
+
+        // 2. Nuevos datos
+        $newData = [
+            'name' => 'Salón Moderno',
+            'capacity' => $room->capacity,
+            'location' => $room->location,
+        ];
+
+        // 3. Acción
+        $response = $this->put(route('salones.update', ['salone' => $room]), $newData);
+
+        // 4. Verificación
+        $response->assertRedirect('/salones');
+        $this->assertEquals('Salón Moderno', $room->fresh()->name);
+    }    
 }

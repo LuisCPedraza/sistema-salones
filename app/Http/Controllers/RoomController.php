@@ -55,17 +55,29 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Room $room)
+    public function edit(Room $salone)
     {
-        //
+        return view('salones.edit', ['salon' => $salone]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(Request $request, Room $salone)
     {
-        //
+        // 1. Validar los datos
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'capacity' => 'required|integer|min:1',
+            'location' => 'required|string|max:255',
+            'resources' => 'nullable|string',
+        ]);
+
+        // 2. Actualizar el salón en la base de datos
+        $salone->update($validatedData);
+
+        // 3. Redirigir
+        return redirect('/salones');
     }
 
     /**
