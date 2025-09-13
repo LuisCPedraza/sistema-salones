@@ -11,7 +11,7 @@
                 <th>Nombre del Grupo</th>
                 <th>Nivel</th>
                 <th>N° Estudiantes</th>
-                <th>Acciones</th>
+                <th>Características Especiales</th> <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -21,21 +21,18 @@
                     <td>{{ $grupo->name }}</td>
                     <td>{{ $grupo->level }}</td>
                     <td>{{ $grupo->students_count }}</td>
-                    <td>
-                        </td>
-                    <td>
+                    <td>{{ $grupo->special_characteristics }}</td> <td>
                         <a href="{{ route('grupos.edit', $grupo) }}">Editar</a>
-                        </td>
                         <form action="{{ route('grupos.destroy', $grupo) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" onclick="return confirm('¿Estás seguro de eliminar este grupo?')">Eliminar</button>
+                            <button type="submit" onclick="return confirm('¿Estás seguro de que quieres eliminar este grupo?')">Eliminar</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5">No hay grupos registrados.</td>
+                    <td colspan="6">No hay grupos registrados.</td>
                 </tr>
             @endforelse
         </tbody>

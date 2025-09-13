@@ -26,8 +26,14 @@
                     <td>
                         </td>
                     <td>
-                        <a href="{{ route('salones.edit', $salon) }}">Editar</a>
-                    </td>
+                        <a href="{{ route('salones.edit', ['salone' => $salon]) }}">Editar</a>
+
+                        <form action="{{ route('salones.destroy', ['salone' => $salon]) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('¿Estás seguro de que quieres eliminar este salón?')">Eliminar</button>
+                        </form>
+                    </td>                    
                 </tr>
             @empty
                 <tr>

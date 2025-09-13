@@ -62,5 +62,20 @@ class RoomManagementTest extends TestCase
         // 4. Verificación
         $response->assertRedirect('/salones');
         $this->assertEquals('Salón Moderno', $room->fresh()->name);
-    }    
+    }
+
+    /** @test */
+    public function a_room_can_be_deleted()
+    {
+        // 1. Preparación
+        $room = Room::factory()->create();
+        $this->assertCount(1, Room::all());
+
+        // 2. Acción
+        $response = $this->delete(route('salones.destroy', ['salone' => $room]));
+
+        // 3. Verificación
+        $response->assertRedirect('/salones');
+        $this->assertCount(0, Room::all());
+    }
 }

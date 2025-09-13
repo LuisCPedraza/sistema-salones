@@ -83,8 +83,10 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Room $room)
+    public function destroy(Room $salone)
     {
-        //
+        $salone->delete();
+
+        return redirect('/salones');
     }
 }
