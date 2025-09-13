@@ -10,6 +10,7 @@
     <nav>
         <a href="{{ route('usuarios.index') }}">Gestionar Usuarios</a> |
         <a href="{{ route('grupos.index') }}">Gestionar Grupos</a>
+        <a href="{{ route('salones.index') }}">Gestionar Salones</a> {{-- <-- AÑADE ESTO --}}
     </nav>
     <hr>
     <main>
