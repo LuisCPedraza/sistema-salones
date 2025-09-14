@@ -12,6 +12,7 @@
         <a href="{{ route('grupos.index') }}">Gestionar Grupos</a>
         <a href="{{ route('salones.index') }}">Gestionar Salones</a> {{-- <-- AÑADE ESTO --}}
         <a href="{{ route('profesores.index') }}">Gestionar Profesores</a> {{-- <-- AÑADE ESTO --}}
+        <a href="{{ route('asignaciones.index') }}">Gestionar Asignaciones</a> {{-- <-- AÑADE ESTO --}}
     </nav>
     <hr>
     <main>
