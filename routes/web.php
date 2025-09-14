@@ -20,3 +20,4 @@ Route::resource('grupos', GroupController::class);
 Route::resource('salones', RoomController::class);
 Route::resource('profesores', TeacherController::class);
 Route::resource('asignaciones', AssignmentController::class);
+Route::get('/horario', [AssignmentController::class, 'showHorario'])->name('horario.show');

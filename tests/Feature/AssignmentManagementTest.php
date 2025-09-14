@@ -39,4 +39,34 @@ class AssignmentManagementTest extends TestCase
         $this->assertCount(1, Assignment::all());
         $response->assertRedirect('/asignaciones'); // O a una vista de calendario, por ahora la lista.
     }
+
+    /** @test */
+    public function an_assignment_can_be_updated()
+    {
+        $assignment = Assignment::factory()->create();
+        $newRoom = Room::factory()->create();
+
+        $newData = [
+            'group_id' => $assignment->group_id,
+            'teacher_id' => $assignment->teacher_id,
+            'room_id' => $newRoom->id,
+            'day_of_week' => $assignment->day_of_week,
+            // CORRECCIÓN: Formateamos la hora al formato H:i que espera la validación
+            'start_time' => date('H:i', strtotime($assignment->start_time)),
+            'end_time' => date('H:i', strtotime($assignment->end_time)),
+        ];
+
+        $this->put(route('asignaciones.update', ['asignacione' => $assignment]), $newData);
+        $this->assertEquals($newRoom->id, $assignment->fresh()->room_id);
+    }
+
+    /** @test */
+    public function an_assignment_can_be_deleted()
+    {
+        $assignment = Assignment::factory()->create();
+        $this->assertCount(1, Assignment::all());
+
+        $this->delete(route('asignaciones.destroy', ['asignacione' => $assignment]));
+        $this->assertCount(0, Assignment::all());
+    }
 }

@@ -3,33 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Assignment;
-use App\Models\Group;     // <-- Añadir/Verificar esta línea
-use App\Models\Teacher;   // <-- Añadir/Verificar esta línea
-use App\Models\Room;      // <-- Añadir/Verificar esta línea
+use App\Models\Group;
+use App\Models\Teacher;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Carga anticipada de relaciones para optimizar consultas
-        $asignaciones = Assignment::with(['group', 'teacher', 'room'])->get();
+        $asignaciones = Assignment::with(['group', 'teacher.user', 'room'])->get();
         return view('asignaciones.index', ['asignaciones' => $asignaciones]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        // Obtenemos todos los recursos para los menús desplegables del formulario
         $grupos = Group::all();
         $profesores = Teacher::with('user')->get();
         $salones = Room::all();
-
         return view('asignaciones.create', [
             'grupos' => $grupos,
             'profesores' => $profesores,
@@ -37,12 +28,8 @@ class AssignmentController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // 1. Validar los datos
         $validatedData = $request->validate([
             'group_id' => 'required|exists:groups,id',
             'teacher_id' => 'required|exists:teachers,id',
@@ -51,43 +38,63 @@ class AssignmentController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
-
-        // 2. Crear la asignación
         Assignment::create($validatedData);
-
-        // 3. Redirigir
         return redirect('/asignaciones');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Assignment $assignment)
+    public function show(Assignment $assignment) {}
+
+    public function edit(Assignment $asignacione)
     {
-        //
+        return view('asignaciones.edit', [
+            'asignacione' => $asignacione,
+            'grupos' => Group::all(),
+            'profesores' => Teacher::with('user')->get(),
+            'salones' => Room::all(),
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Assignment $assignment)
+    public function update(Request $request, Assignment $asignacione)
     {
-        //
+        $validatedData = $request->validate([
+            'group_id' => 'required|exists:groups,id',
+            'teacher_id' => 'required|exists:teachers,id',
+            'room_id' => 'required|exists:rooms,id',
+            'day_of_week' => 'required|string',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+        ]);
+        $asignacione->update($validatedData);
+        return redirect('/asignaciones');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Assignment $assignment)
+    public function destroy(Assignment $asignacione)
     {
-        //
+        $asignacione->delete();
+        return redirect('/asignaciones');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Assignment $assignment)
+    public function showHorario()
     {
-        //
+        $days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+        $timeSlots = [];
+        for ($hour = 7; $hour <= 21; $hour++) {
+            $timeSlots[] = sprintf('%02d:00:00', $hour);
+        }
+        $assignments = Assignment::with(['group', 'teacher.user', 'room'])->get();
+        $horario = [];
+        foreach ($assignments as $assignment) {
+            $startTime = strtotime($assignment->start_time);
+            $endTime = strtotime($assignment->end_time);
+            $durationInHours = round(($endTime - $startTime) / 3600);
+            $assignment->duration = $durationInHours > 0 ? $durationInHours : 1;
+            $startTimeFormatted = date('H:00:00', $startTime);
+            $horario[$startTimeFormatted][$assignment->day_of_week] = $assignment;
+        }
+        return view('horario.show', [
+            'days' => $days,
+            'timeSlots' => $timeSlots,
+            'horario' => $horario,
+        ]);
     }
 }
