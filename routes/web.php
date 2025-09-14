@@ -10,10 +10,11 @@ Route::get('/', function () {
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\TeacherController;
 
 // ... (puede haber otras rutas aquí)
 
 Route::resource('usuarios', UserController::class);
 Route::resource('grupos', GroupController::class);
 Route::resource('salones', RoomController::class);
-
+Route::resource('profesores', TeacherController::class);

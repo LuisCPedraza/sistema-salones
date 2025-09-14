@@ -1,34 +1,45 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Gestión de Grupos</h1>
-    <a href="{{ route('grupos.create') }}">Crear Nuevo Grupo</a>
-    <br><br>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre del Grupo</th>
-                <th>Nivel</th>
-                <th>N° Estudiantes</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($grupos as $grupo)
-                <tr>
-                    <td>{{ $grupo->id }}</td>
-                    <td>{{ $grupo->name }}</td>
-                    <td>{{ $grupo->level }}</td>
-                    <td>{{ $grupo->students_count }}</td>
-                    <td>
-                        </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="5">No hay grupos registrados.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+    <h1>Editar Usuario: {{ $usuario->name }}</h1>
+
+    {{-- Bloque para mostrar errores de validación --}}
+    @if ($errors->any())
+        <div style="color: red; margin-bottom: 20px;">
+            <strong>¡Ups! Hubo algunos problemas con tu entrada.</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('usuarios.update', $usuario) }}" method="POST">
+        @csrf
+        @method('PUT')
+
+        <div>
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" name="name" value="{{ $usuario->name }}" required>
+        </div>
+        <br>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ $usuario->email }}" required>
+        </div>
+        <br>
+        <div>
+            <label for="role_id">Rol:</label>
+            <select name="role_id" id="role_id" required>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->id }}" {{ $usuario->role_id == $role->id ? 'selected' : '' }}>
+                        {{ $role->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <br>
+        <button type="submit">Actualizar Usuario</button>
+    </form>
 @endsection

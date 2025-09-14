@@ -53,5 +53,13 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
-    }    
+    } 
+    
+    /**
+     * Un usuario tiene un perfil de profesor.
+     */
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
 }
