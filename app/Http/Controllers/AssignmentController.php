@@ -6,7 +6,9 @@ use App\Models\Assignment;
 use App\Models\Group;
 use App\Models\Teacher;
 use App\Models\Room;
+use App\Rules\NoTimeOverlap;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AssignmentController extends Controller
 {
@@ -30,19 +32,27 @@ class AssignmentController extends Controller
 
     public function store(Request $request)
     {
+        dd('Estoy dentro del método store'); // <-- AÑADE ESTA LÍNEA ESPÍA
         $validatedData = $request->validate([
             'group_id' => 'required|exists:groups,id',
             'teacher_id' => 'required|exists:teachers,id',
             'room_id' => 'required|exists:rooms,id',
             'day_of_week' => 'required|string',
             'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'end_time' => [
+                'required',
+                'date_format:H:i',
+                'after:start_time',
+                new NoTimeOverlap(), // La regla personalizada se encarga de todo
+            ],
         ]);
+
         Assignment::create($validatedData);
+
         return redirect('/asignaciones');
     }
 
-    public function show(Assignment $assignment) {}
+    public function show(Assignment $assignment){}
 
     public function edit(Assignment $asignacione)
     {

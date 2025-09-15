@@ -1,23 +1,32 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
-// Other routes...
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AssignmentController;
 
-// ... (puede haber otras rutas aquí)
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::resource('usuarios', UserController::class);
-Route::resource('grupos', GroupController::class);
-Route::resource('salones', RoomController::class);
-Route::resource('profesores', TeacherController::class);
-Route::resource('asignaciones', AssignmentController::class);
-Route::get('/horario', [AssignmentController::class, 'showHorario'])->name('horario.show');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Nuestras rutas
+    Route::resource('usuarios', UserController::class);
+    Route::resource('grupos', GroupController::class);
+    Route::resource('salones', RoomController::class);
+    Route::resource('profesores', TeacherController::class);
+    Route::resource('asignaciones', AssignmentController::class);
+    Route::get('/horario', [AssignmentController::class, 'showHorario'])->name('horario.show');    
+});
+
+require __DIR__.'/auth.php';
