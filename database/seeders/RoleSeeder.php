@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Seeder;
-use App\Models\Role; // <-- Importante importar el modelo
 
 class RoleSeeder extends Seeder
 {
@@ -12,8 +12,17 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'coordinador']);
-        Role::create(['name' => 'profesor']);
+        $roles = [
+            'admin',
+            'coordinador',
+            'profesor',
+        ];
+
+        foreach ($roles as $role) {
+            Role::firstOrCreate(['name' => $role]);
+        }
+
+        $this->command->info('✅ Roles básicos creados: admin, coordinador, profesor');
     }
 }
+

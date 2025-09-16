@@ -10,7 +10,7 @@ class RoomManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function a_room_can_be_created()
     {
         // Datos de prueba
@@ -29,7 +29,7 @@ class RoomManagementTest extends TestCase
         $response->assertRedirect('/salones');
     }
 
-    /** @test */
+    #[Test]
     public function the_edit_room_page_loads_correctly()
     {
         // 1. Preparación
@@ -43,7 +43,7 @@ class RoomManagementTest extends TestCase
         $response->assertSee($room->name);
     }
 
-    /** @test */
+    #[Test]
     public function a_room_can_be_deleted()
     {
         // 1. Preparación
@@ -58,7 +58,7 @@ class RoomManagementTest extends TestCase
         $this->assertCount(0, Room::all());
     }
 
-    /** @test */
+    #[Test]
     public function a_room_can_be_updated()
     {
         // 1. Preparación

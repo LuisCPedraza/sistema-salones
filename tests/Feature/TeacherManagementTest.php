@@ -13,7 +13,7 @@ class TeacherManagementTest extends TestCase
     use RefreshDatabase;
     protected $seed = true;
 
-    /** @test */
+    #[Test]
     public function a_teacher_can_be_created()
     {
         $role = Role::where('name', 'profesor')->first();
@@ -29,7 +29,7 @@ class TeacherManagementTest extends TestCase
         $this->assertCount(1, Teacher::all());
     }
 
-    /** @test */
+    #[Test]
     public function a_teacher_can_be_updated()
     {
         $teacher = Teacher::factory()->create(['specialty' => 'Física']);
@@ -44,7 +44,7 @@ class TeacherManagementTest extends TestCase
         $this->assertEquals('Física Cuántica', $teacher->fresh()->specialty);
     }
 
-    /** @test */
+    #[Test]
     public function a_teacher_can_be_deleted()
     {
         $teacher = Teacher::factory()->create();

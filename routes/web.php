@@ -26,7 +26,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('salones', RoomController::class);
     Route::resource('profesores', TeacherController::class);
     Route::resource('asignaciones', AssignmentController::class);
-    Route::get('/horario', [AssignmentController::class, 'showHorario'])->name('horario.show');    
+    Route::get('/horario', [AssignmentController::class, 'showHorario'])->name('horario.show');
+    //Autoasignación (Épica 5)
+    Route::post('/asignaciones/auto', [AssignmentController::class, 'autoAssign'])->name('asignaciones.auto');
+    // Horarios personales (Épica 7)
+    Route::get('/horario/profesor/{teacher}', [AssignmentController::class, 'teacherSchedule'])->name('horario.profesor');
+    Route::get('/horario/grupo/{group}', [AssignmentController::class, 'groupSchedule'])->name('horario.grupo');
+    Route::get('/horario/salon/{room}', [AssignmentController::class, 'roomSchedule'])->name('horario.salon');
+    // Reportes (Épica 7)
+    Route::get('/reportes', [AssignmentController::class, 'reports'])->name('reportes.index');
 });
 
 require __DIR__.'/auth.php';

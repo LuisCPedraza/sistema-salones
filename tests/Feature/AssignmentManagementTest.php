@@ -15,7 +15,7 @@ class AssignmentManagementTest extends TestCase
     use RefreshDatabase;
     protected $seed = true;
 
-    /** @test */
+    #[Test]
     public function a_manual_assignment_can_be_created()
     {
         $teacher = Teacher::factory()->create();
@@ -34,7 +34,7 @@ class AssignmentManagementTest extends TestCase
         $response->assertRedirect(route('asignaciones.index'));
     }
 
-    /** @test */
+    #[Test]
     public function an_assignment_can_be_updated()
     {
         $assignment = Assignment::factory()->create();
@@ -51,7 +51,7 @@ class AssignmentManagementTest extends TestCase
         $this->assertEquals($newRoom->id, $assignment->fresh()->room_id);
     }
 
-    /** @test */
+    #[Test]
     public function an_assignment_can_be_deleted()
     {
         $assignment = Assignment::factory()->create();
@@ -60,7 +60,7 @@ class AssignmentManagementTest extends TestCase
         $this->assertCount(0, Assignment::all());
     }
 
-    /** @test */
+    #[Test]
     public function it_prevents_creating_a_conflicting_assignment_for_a_teacher()
     {
         // 1. Preparación: Creamos una asignación que ya existe en la BD

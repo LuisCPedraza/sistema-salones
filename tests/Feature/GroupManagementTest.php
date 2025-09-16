@@ -10,7 +10,7 @@ class GroupManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function a_group_can_be_created()
     {
         // 1. Datos de prueba
@@ -29,7 +29,7 @@ class GroupManagementTest extends TestCase
         $response->assertRedirect('/grupos');
     }
 
-    /** @test */
+    #[Test]
     public function the_edit_group_page_loads_correctly()
     {
         // 1. Creamos un grupo para poder editarlo.
@@ -44,7 +44,7 @@ class GroupManagementTest extends TestCase
         $response->assertSee($group->level);
     }    
 
-    /** @test */
+    #[Test]
     public function a_group_can_be_updated()
     {
         // 1. Preparación: Creamos un grupo existente.
@@ -66,7 +66,7 @@ class GroupManagementTest extends TestCase
         $response->assertRedirect('/grupos');
         $this->assertEquals('Nombre Actualizado', $group->fresh()->name);
     }
-    /** @test */
+    #[Test]
     public function a_group_can_be_deleted()
     {
         // 1. Preparación

@@ -11,7 +11,7 @@ class UserRoleTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function the_edit_user_page_loads_correctly_with_user_data()
     {
         // 1. Preparación: Creamos un rol y un usuario.
@@ -32,7 +32,7 @@ class UserRoleTest extends TestCase
         $response->assertSee($user->email);
     }    
 
-    /** @test */
+    #[Test]
     public function a_user_can_be_assigned_a_role()
     {
         $adminRole = Role::create(['name' => 'admin']);
@@ -47,7 +47,7 @@ class UserRoleTest extends TestCase
 
     // --- ESTA ES LA NUEVA PRUEBA QUE AÑADIMOS ---
 
-    /** @test */
+    #[Test]
     public function the_create_user_form_can_store_a_new_user()
     {
         // 1. Preparación (Arrange)
@@ -69,7 +69,7 @@ class UserRoleTest extends TestCase
         $response->assertRedirect(route('usuarios.index'));
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_be_updated_through_the_edit_form()
     {
         // 1. Preparación: Creamos un rol y un usuario existente.
@@ -97,7 +97,7 @@ class UserRoleTest extends TestCase
         $this->assertEquals('Nombre Actualizado', $user->name);
     }
 
-    /** @test */
+    #[Test]
     public function a_user_can_be_deleted()
     {
         // 1. Preparación: Creamos un rol y un usuario.

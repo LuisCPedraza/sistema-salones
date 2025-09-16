@@ -3,6 +3,7 @@
 @section('content')
     <h1>Crear Nueva Asignación</h1>
 
+    {{-- Formulario manual (HU11 – Asignación Manual) --}}
     <form action="{{ route('asignaciones.store') }}" method="POST">
         @csrf
         <div>
@@ -55,5 +56,25 @@
         </div>
         <br>
         <button type="submit">Guardar Asignación</button>
+    </form>
+
+    <hr>
+
+    {{-- Formulario Autoasignación (HU9 – HU10) --}}
+    <h3>Autoasignación de Grupos</h3>
+    <form method="POST" action="{{ route('asignaciones.auto') }}">
+        @csrf
+        <div>
+            <label>Duración de clase (horas):</label>
+            <input type="number" name="duracion_horas" value="2" min="1" max="6">
+        </div>
+        <div>
+            <label>Hora inicio:</label>
+            <input type="time" name="hora_inicio" value="07:00">
+            <label>Hora fin:</label>
+            <input type="time" name="hora_fin" value="19:00">
+        </div>
+        <br>
+        <button type="submit">Ejecutar Autoasignación</button>
     </form>
 @endsection

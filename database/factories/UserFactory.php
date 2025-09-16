@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\Role; // <-- AÑADE ESTA LÍNEA
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -13,20 +13,14 @@ use App\Models\Role; // <-- AÑADE ESTA LÍNEA
 class UserFactory extends Factory
 {
     /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
-     * Define the model's default state.
+     * Define el estado por defecto del modelo.
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
-        // Buscamos el rol de profesor. Esto funciona en las pruebas
-        // porque le dijimos a la clase de prueba que ejecute los seeders.
-        $profesorRole = Role::where('name', 'profesor')->first();
+        // Busca o crea automáticamente el rol "profesor"
+        $profesorRole = Role::firstOrCreate(['name' => 'profesor']);
 
         return [
             'name' => fake()->name(),
@@ -34,12 +28,12 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role_id' => $profesorRole->id, // <-- AÑADE ESTA LÍNEA
+            'role_id' => $profesorRole->id, // ✅ siempre asigna un rol válido
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Indica que el email del usuario no está verificado.
      */
     public function unverified(): static
     {
