@@ -32,21 +32,17 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // ---- INICIO DE NUESTRA MODIFICACIÓN ----
+        // ✅ Aseguramos que el rol "profesor" siempre exista
+        $defaultRole = Role::firstOrCreate(
+            ['name' => 'profesor'],
+            ['description' => 'Rol por defecto para profesores']
+        );
 
-        // 1. Buscamos el rol por defecto para los nuevos usuarios.
-        $defaultRole = Role::where('name', 'profesor')->first();
-        if (!$defaultRole) {
-            // Opcional: Manejar el caso en que el rol no exista.
-            // Por ahora, supondremos que siempre existe gracias a nuestro seeder.
-            return back()->withErrors(['msg' => 'No se pudo asignar un rol por defecto.']);
-        }
-
-        // 2. Creamos el usuario, añadiendo el role_id.
+        // ✅ Creamos el usuario asignándole el rol por defecto
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -54,12 +50,11 @@ class RegisteredUserController extends Controller
             'role_id' => $defaultRole->id,
         ]);
 
-        // ---- FIN DE NUESTRA MODIFICACIÓN ----
-
         event(new Registered($user));
 
+        // ✅ Autenticamos al nuevo usuario
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }
