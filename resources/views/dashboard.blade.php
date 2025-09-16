@@ -47,5 +47,11 @@
             </x-table>
         </x-card>
 
-    </div>
+        <x-card>
+            <h3 class="text-lg font-semibold mb-2">¡Hola!</h3>
+            <p>Usuarios: {{ $usuarios->count() }} | Grupos: {{ $grupos->count() }} | Salones: {{ $salones->count() }}</p>
+            <x-button class="mt-4">Acción</x-button>
+        </x-card>        
+        
+    </div>    
 </x-app-layout>

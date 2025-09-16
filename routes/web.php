@@ -7,14 +7,11 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,6 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/horario/salon/{room}', [AssignmentController::class, 'roomSchedule'])->name('horario.salon');
     // Reportes (Épica 7)
     Route::get('/reportes', [AssignmentController::class, 'reports'])->name('reportes.index');
+
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])
+        ->middleware(['auth'])
+        ->name('dashboard');
 });
 
 require __DIR__.'/auth.php';
