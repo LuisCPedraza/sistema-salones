@@ -9,13 +9,17 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $guarded = []; // Permitir asignación masiva
+    protected $fillable = ['name','specialty','cv','user_id'];
 
-    /**
-     * Un profesor pertenece a un usuario.
-     */
+    // 🔑 Relación con usuario
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function availabilities()
+    {
+        return $this->hasMany(TeacherAvailability::class);
+    }
 }
+

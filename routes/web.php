@@ -8,6 +8,8 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoomAvailabilityController;
+use App\Http\Controllers\TeacherAvailabilityController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])
         ->middleware(['auth'])
         ->name('dashboard');
+
+    Route::resource('rooms.availabilities', RoomAvailabilityController::class)->shallow();
+    Route::resource('teachers.availabilities', TeacherAvailabilityController::class)->shallow();
 });
 
 require __DIR__.'/auth.php';

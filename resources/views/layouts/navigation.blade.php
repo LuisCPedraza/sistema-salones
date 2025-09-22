@@ -104,4 +104,18 @@
             </div>
         </div>
     </div>
+    <div>
+        <button id="theme-toggle"
+            class="p-2 rounded-full text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+            <!-- Sol -->
+            <svg id="icon-sun" class="hidden h-6 w-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 15a5 5 0 100-10 5 5 0 000 10z"/>
+                <path fill-rule="evenodd" d="M10 1a1 1 0 011 1v1a1 1 0 11-2 0V2a1 1 0 011-1zm0 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM19 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM4 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1z" clip-rule="evenodd"/>
+            </svg>
+            <!-- Luna -->
+            <svg id="icon-moon" class="h-6 w-6 text-gray-200" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707 8 8 0 1017.293 13.293z"/>
+            </svg>
+        </button>
+    </div>
 </nav>

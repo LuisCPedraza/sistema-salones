@@ -1,29 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Horario Semestral</h1>
-    <style>
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; vertical-align: top; height: 60px; }
-        th { background-color: #f2f2f2; }
-        .assignment { background-color: #e0f7fa; border-radius: 5px; padding: 5px; font-size: 0.8em; height: 100%; }
-    </style>
+    <h1 class="text-xl font-bold mb-4">Horario Semestral</h1>
 
     @php $spannedCells = []; @endphp
 
-    <table border="1">
+    <table class="w-full border-collapse table-fixed text-sm">
         <thead>
             <tr>
-                <th style="width: 10%;">Hora</th>
+                <th class="w-24 border border-gray-300 bg-gray-200 dark:bg-gray-700 dark:text-gray-100">Hora</th>
                 @foreach ($days as $day)
-                    <th>{{ ucfirst($day) }}</th>
+                    <th class="border border-gray-300 bg-gray-200 dark:bg-gray-700 dark:text-gray-100">
+                        {{ ucfirst($day) }}
+                    </th>
                 @endforeach
             </tr>
         </thead>
         <tbody>
             @foreach ($timeSlots as $timeSlot)
                 <tr>
-                    <td>{{ date('h:i A', strtotime($timeSlot)) }}</td>
+                    <td class="border border-gray-300 p-2 text-center dark:border-gray-600">
+                        {{ date('h:i A', strtotime($timeSlot)) }}
+                    </td>
                     @foreach ($days as $day)
                         @if(isset($spannedCells[$timeSlot][$day]))
                             @continue
@@ -37,15 +35,15 @@
                                     $spannedCells[$nextSlot][$day] = true;
                                 }
                             @endphp
-                            <td rowspan="{{ $assignment->duration }}">
-                                <div class="assignment">
+                            <td rowspan="{{ $assignment->duration }}" class="border border-gray-300 dark:border-gray-600 p-1">
+                                <div class="p-2 rounded bg-blue-100 text-gray-900 dark:bg-blue-800 dark:text-white">
                                     <strong>{{ $assignment->group->name }}</strong><br>
                                     {{ $assignment->teacher->user->name }}<br>
                                     <em>Salón: {{ $assignment->room->name }}</em>
                                 </div>
                             </td>
                         @else
-                            <td></td>
+                            <td class="border border-gray-300 dark:border-gray-600"></td>
                         @endif
                     @endforeach
                 </tr>
