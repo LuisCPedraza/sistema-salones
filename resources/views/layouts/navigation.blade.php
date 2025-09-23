@@ -119,3 +119,6 @@
         </button>
     </div>
 </nav>
+<x-nav-link :href="route('horario.dragdrop')" :active="request()->routeIs('horario.dragdrop')">
+    {{ __('Horario Drag & Drop') }}
+</x-nav-link>
