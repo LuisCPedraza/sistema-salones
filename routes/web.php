@@ -10,6 +10,7 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoomAvailabilityController;
 use App\Http\Controllers\TeacherAvailabilityController;
+use App\Http\Controllers\DragDropController;
 
 
 Route::get('/', function () {
@@ -47,7 +48,10 @@ Route::middleware('auth')->group(function () {
         ->name('assignments.manual');
 
     Route::post('/asignaciones/manual', [AssignmentController::class, 'storeManual'])
-        ->name('assignments.storeManual');    
+        ->name('assignments.storeManual');
+
+    Route::get('/horario/dragdrop', [DragDropController::class, 'index'])->name('horario.dragdrop');
+    Route::post('/horario/dragdrop/update', [DragDropController::class, 'update'])->name('horario.dragdrop.update');
 });
 
 require __DIR__.'/auth.php';
