@@ -215,21 +215,38 @@ class AssignmentController extends Controller
 
     public function showHorario()
     {
-        $days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+        // Días como números → texto
+        $days = [
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado',
+        ];
+
+        // Horas de 7am a 9pm
         $timeSlots = [];
         for ($hour = 7; $hour <= 21; $hour++) {
             $timeSlots[] = sprintf('%02d:00:00', $hour);
         }
+
+        // Asignaciones con relaciones
         $assignments = Assignment::with(['group', 'teacher.user', 'room'])->get();
+
+        // Construcción de la matriz horario
         $horario = [];
         foreach ($assignments as $assignment) {
             $startTime = strtotime($assignment->start_time);
-            $endTime = strtotime($assignment->end_time);
+            $endTime   = strtotime($assignment->end_time);
             $durationInHours = round(($endTime - $startTime) / 3600);
             $assignment->duration = $durationInHours > 0 ? $durationInHours : 1;
             $startTimeFormatted = date('H:00:00', $startTime);
+
+            // Usamos el número del día (1–6)
             $horario[$startTimeFormatted][$assignment->day_of_week] = $assignment;
         }
+
         return view('horario.show', [
             'days' => $days,
             'timeSlots' => $timeSlots,

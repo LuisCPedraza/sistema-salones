@@ -2,40 +2,41 @@
 
 @section('content')
     <h1 class="text-xl font-bold mb-4">Horario Semestral</h1>
+    <style>
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; vertical-align: top; height: 60px; }
+        th { background-color: #f2f2f2; }
+    </style>
 
     @php $spannedCells = []; @endphp
 
-    <table class="w-full border-collapse table-fixed text-sm">
+    <table>
         <thead>
             <tr>
-                <th class="w-24 border border-gray-300 bg-gray-200 dark:bg-gray-700 dark:text-gray-100">Hora</th>
-                @foreach ($days as $day)
-                    <th class="border border-gray-300 bg-gray-200 dark:bg-gray-700 dark:text-gray-100">
-                        {{ ucfirst($day) }}
-                    </th>
+                <th style="width: 10%;">Hora</th>
+                @foreach ($days as $num => $day)
+                    <th>{{ $day }}</th>
                 @endforeach
             </tr>
         </thead>
         <tbody>
             @foreach ($timeSlots as $timeSlot)
                 <tr>
-                    <td class="border border-gray-300 p-2 text-center dark:border-gray-600">
-                        {{ date('h:i A', strtotime($timeSlot)) }}
-                    </td>
-                    @foreach ($days as $day)
-                        @if(isset($spannedCells[$timeSlot][$day]))
+                    <td>{{ date('h:i A', strtotime($timeSlot)) }}</td>
+                    @foreach ($days as $num => $day)
+                        @if(isset($spannedCells[$timeSlot][$num]))
                             @continue
                         @endif
 
-                        @if(isset($horario[$timeSlot][$day]))
+                        @if(isset($horario[$timeSlot][$num]))
                             @php
-                                $assignment = $horario[$timeSlot][$day];
+                                $assignment = $horario[$timeSlot][$num];
                                 for ($i = 1; $i < $assignment->duration; $i++) {
                                     $nextSlot = date('H:00:00', strtotime($timeSlot) + $i * 3600);
-                                    $spannedCells[$nextSlot][$day] = true;
+                                    $spannedCells[$nextSlot][$num] = true;
                                 }
                             @endphp
-                            <td rowspan="{{ $assignment->duration }}" class="border border-gray-300 dark:border-gray-600 p-1">
+                            <td rowspan="{{ $assignment->duration }}">
                                 <div class="p-2 rounded bg-blue-100 text-gray-900 dark:bg-blue-800 dark:text-white">
                                     <strong>{{ $assignment->group->name }}</strong><br>
                                     {{ $assignment->teacher->user->name }}<br>
@@ -43,7 +44,7 @@
                                 </div>
                             </td>
                         @else
-                            <td class="border border-gray-300 dark:border-gray-600"></td>
+                            <td></td>
                         @endif
                     @endforeach
                 </tr>
