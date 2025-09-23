@@ -253,4 +253,48 @@ class AssignmentController extends Controller
             'horario' => $horario,
         ]);
     }
+
+    public function manual()
+    {
+        $groups = \App\Models\Group::all();
+        $teachers = \App\Models\Teacher::with('user')->get();
+        $rooms = \App\Models\Room::all();
+        $days = ['lunes','martes','miércoles','jueves','viernes','sábado'];
+
+        return view('assignments.manual', compact('groups','teachers','rooms','days'));
+    }
+
+    public function storeManual(Request $request)
+    {
+        $request->validate([
+            'group_id'    => 'required|exists:groups,id',
+            'teacher_id'  => 'required|exists:teachers,id',
+            'room_id'     => 'required|exists:rooms,id',
+            'day_of_week' => 'required|integer|min:1|max:6',
+            'start_time'  => 'required|date_format:H:i',
+            'end_time'    => 'required|date_format:H:i|after:start_time',
+        ]);
+
+        // Validar conflictos
+        $conflict = \App\Models\Assignment::where('day_of_week', $request->day_of_week)
+            ->where(function($q) use ($request){
+                $q->where('room_id', $request->room_id)
+                ->orWhere('teacher_id', $request->teacher_id)
+                ->orWhere('group_id', $request->group_id);
+            })
+            ->where('start_time','<',$request->end_time)
+            ->where('end_time','>',$request->start_time)
+            ->exists();
+
+        if ($conflict) {
+            return response()->json(['error' => '⚠️ Conflicto detectado en la asignación.'], 409);
+        }
+
+        $assignment = \App\Models\Assignment::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'assignment' => $assignment
+        ]);
+    }    
 }

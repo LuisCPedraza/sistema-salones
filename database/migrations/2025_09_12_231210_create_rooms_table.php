@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // Un nombre o número para el salón, ej: "Salón 201"
             $table->integer('capacity'); // La capacidad de estudiantes
-            $table->string('location'); // Ej: "Edificio A, Piso 2"
+            $table->string('location')->nullable(); // Ej: "Edificio A, Piso 2"
             $table->text('resources')->nullable(); // Ej: "Proyector, Pizarra digital, 15 computadoras"
             $table->timestamps();
         });

@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoomAvailabilityController;
 use App\Http\Controllers\TeacherAvailabilityController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -41,6 +42,12 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('rooms.availabilities', RoomAvailabilityController::class)->shallow();
     Route::resource('teachers.availabilities', TeacherAvailabilityController::class)->shallow();
+    Route::post('/asignaciones/manual', [AssignmentController::class, 'storeManual'])->name('assignments.storeManual');
+    Route::get('/asignaciones/manual', [AssignmentController::class, 'manual'])
+        ->name('assignments.manual');
+
+    Route::post('/asignaciones/manual', [AssignmentController::class, 'storeManual'])
+        ->name('assignments.storeManual');    
 });
 
 require __DIR__.'/auth.php';

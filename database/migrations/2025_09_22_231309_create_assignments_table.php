@@ -13,17 +13,12 @@ return new class extends Migration
     {
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
-
-            // Llaves foráneas a nuestras otras tablas
             $table->foreignId('group_id')->constrained()->onDelete('cascade');
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
-
-            // Información del horario
-            $table->enum('day_of_week', ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']);
+            $table->tinyInteger('day_of_week'); // 1=Lunes … 6=Sábado
             $table->time('start_time');
             $table->time('end_time');
-
             $table->timestamps();
         });
     }
