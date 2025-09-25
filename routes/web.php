@@ -1,13 +1,57 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoomAvailabilityController;
+use App\Http\Controllers\TeacherAvailabilityController;
+use App\Http\Controllers\DragDropController;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
-// Other routes...
-use App\Http\Controllers\UserController;
 
-// ... (puede haber otras rutas aquí)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Nuestras rutas
+    Route::resource('usuarios', UserController::class);
+    Route::resource('grupos', GroupController::class);
+    Route::resource('salones', RoomController::class);
+    Route::resource('profesores', TeacherController::class);
+    Route::resource('asignaciones', AssignmentController::class);
+    Route::get('/horario', [AssignmentController::class, 'showHorario'])->name('horario.show');
+    //Autoasignación (Épica 5)
+    Route::post('/asignaciones/auto', [AssignmentController::class, 'autoAssign'])->name('asignaciones.auto');
+    // Horarios personales (Épica 7)
+    Route::get('/horario/profesor/{teacher}', [AssignmentController::class, 'teacherSchedule'])->name('horario.profesor');
+    Route::get('/horario/grupo/{group}', [AssignmentController::class, 'groupSchedule'])->name('horario.grupo');
+    Route::get('/horario/salon/{room}', [AssignmentController::class, 'roomSchedule'])->name('horario.salon');
+    // Reportes (Épica 7)
+    Route::get('/reportes', [AssignmentController::class, 'reports'])->name('reportes.index');
 
-Route::resource('usuarios', UserController::class);
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])
+        ->middleware(['auth'])
+        ->name('dashboard');
+
+    Route::resource('rooms.availabilities', RoomAvailabilityController::class)->shallow();
+    Route::resource('teachers.availabilities', TeacherAvailabilityController::class)->shallow();
+    Route::post('/asignaciones/manual', [AssignmentController::class, 'storeManual'])->name('assignments.storeManual');
+    Route::get('/asignaciones/manual', [AssignmentController::class, 'manual'])
+        ->name('assignments.manual');
+
+    Route::post('/asignaciones/manual', [AssignmentController::class, 'storeManual'])
+        ->name('assignments.storeManual');
+
+    Route::get('/horario/dragdrop', [DragDropController::class, 'index'])->name('horario.dragdrop');
+    Route::post('/horario/dragdrop/update', [DragDropController::class, 'update'])->name('horario.dragdrop.update');
+});
+
+require __DIR__.'/auth.php';

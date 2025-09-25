@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Crear Usuario</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <h1>Crear Nuevo Usuario</h1>
 
-    <form action="/usuarios" method="POST">
-        @csrf <div>
+    {{-- Bloque para mostrar errores de validación --}}
+    @if ($errors->any())
+        <div style="color: red; margin-bottom: 20px;">
+            <strong>¡Ups! Hubo algunos problemas con tu entrada.</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('usuarios.store') }}" method="POST">
+        @csrf
+        <div>
             <label for="name">Nombre:</label>
             <input type="text" id="name" name="name" required>
         </div>
@@ -22,7 +32,16 @@
             <input type="password" id="password" name="password" required>
         </div>
         <br>
+        <div>
+            <label for="role_id">Rol:</label>
+            <select name="role_id" id="role_id" required>
+                <option value="">Seleccione un rol</option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <br>
         <button type="submit">Guardar Usuario</button>
     </form>
-</body>
-</html>
+@endsection
